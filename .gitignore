@@ -12,6 +12,7 @@
 # Each content folder: ignore all .md files EXCEPT _EXAMPLE_* ones
 00_INBOX/*.md
 !00_INBOX/_EXAMPLE_*.md
+00_INBOX/_archive/
 
 01_CLIENTS/*.md
 01_CLIENTS/**/*.md

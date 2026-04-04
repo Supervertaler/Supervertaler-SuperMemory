@@ -14,8 +14,8 @@ The SuperMemory compilation agent will process files in this folder,
 extract structured knowledge, and write compiled articles into the
 appropriate folders (01_CLIENTS, 02_TERMINOLOGY, 03_DOMAINS, 04_STYLE).
 
-Once a file has been compiled, the agent will add a frontmatter tag:
-`compiled: true` — so it knows not to reprocess it.
+Once a file has been compiled, the agent moves it to `_archive/` in this
+folder. Only unprocessed files remain visible in the inbox.
 
 ---
 

@@ -81,7 +81,7 @@ If the input contains style rules, formatting conventions, or register decisions
 3. **Record the WHY.** When a terminology choice was made, record why alternatives were rejected. This prevents future re-litigation of the same decision.
 4. **Preserve source attribution.** Always note where the information came from in the frontmatter (`compiled_from`) and in a Sources section.
 5. **Flag conflicts.** If new information contradicts an existing KB entry, do not silently overwrite. Create a note in the relevant article's Notes section flagging the conflict for human review.
-6. **Mark the inbox file as processed.** After compilation, add `compiled: true` and `compiled_date: YYYY-MM-DD` to the source file's frontmatter.
+6. **Archive the inbox file.** After compilation, add `compiled: true`, `compiled_date: YYYY-MM-DD`, and `compiled_to: [list of output files]` to the source file's frontmatter, then move it to `00_INBOX/_archive/`. This keeps the inbox clean — only unprocessed files remain visible.
 
 ## Output format
 Return the full content of each file to be created, clearly indicating the target path:
