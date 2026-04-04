@@ -49,7 +49,7 @@ After translating, produce a brief report of:
 - **Conflicts found:** Any contradictions between KB entries and actual usage
 - **Suggestions:** Proposed updates to client profiles, terminology, or domain articles
 
-This report is deposited in `00_INBOX/` for the compilation agent to process.
+This report is deposited in `00_INBOX/` for **Process Inbox** to pick up next time.
 
 ## Output format
 ```

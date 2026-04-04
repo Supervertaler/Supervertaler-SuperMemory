@@ -10,16 +10,17 @@ This folder is the **inbox** for SuperMemory. Drop any raw material here:
 - Feedback emails or correction notes
 - Domain-specific reference material
 
-The SuperMemory compilation agent will process files in this folder,
-extract structured knowledge, and write compiled articles into the
-appropriate folders (01_CLIENTS, 02_TERMINOLOGY, 03_DOMAINS, 04_STYLE).
+Click **Process Inbox** in the Supervertaler Assistant toolbar to process
+files in this folder. The AI extracts structured knowledge and writes
+articles into the appropriate folders (01_CLIENTS, 02_TERMINOLOGY,
+03_DOMAINS, 04_STYLE).
 
-Once a file has been compiled, the agent moves it to `_archive/` in this
+Once a file has been processed, it is moved to `_archive/` in this
 folder. Only unprocessed files remain visible in the inbox.
 
 ---
 
 ## Example raw content (paste below this line)
 
-[Your raw content goes here. The compilation agent will read everything
+[Your raw content goes here. Process Inbox will read everything
 below this line and produce structured knowledge base entries from it.]
