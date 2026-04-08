@@ -1,74 +1,38 @@
-# Supervertaler SuperMemory
+# Supervertaler-SuperMemory (archived)
 
-A self-organizing, AI-maintained translation knowledge base for the [Supervertaler](https://supervertaler.com) ecosystem.
+> **This repository has moved.**
+>
+> It is now part of [**Supervertaler/supervertaler-assistant**](https://github.com/Supervertaler/supervertaler-assistant).
 
-Inspired by Andrej Karpathy's [LLM Knowledge Base](https://venturebeat.com/data/karpathy-shares-llm-knowledge-base-architecture-that-bypasses-rag-with-an) architecture. No vector database, no RAG — just structured Markdown, `[[backlinks]]`, and an LLM acting as your research librarian.
+## What happened
 
-## What is SuperMemory?
+"SuperMemory" has been retired as a product name. What used to be called
+"the SuperMemory vault" is now called a **memory bank** – the long-term
+memory of the **Supervertaler Assistant**, a cross-platform AI assistant
+for professional translators.
 
-SuperMemory replaces traditional translation memories and term bases with a **living knowledge base** that organizes itself. You drop raw material in, and the AI processes it into structured, interlinked articles about your clients, terminology, domains, and style conventions.
+Everything that used to live here has a new home in the unified
+`supervertaler-assistant` repo:
 
-When a new translation project comes in, the AI consults the knowledge base and translates with full contextual awareness — not just fuzzy TM matching, but actual understanding of why terms were chosen, how a client prefers their texts, and what pitfalls to avoid in a given domain.
+| What it was | Where to find it now |
+|---|---|
+| Vault format specification (`SPEC.md`) | [`SPEC.md`](https://github.com/Supervertaler/supervertaler-assistant/blob/main/SPEC.md) – now titled *Supervertaler Memory Bank Format – Specification* (v1.1) |
+| Starting vault skeleton (`00_INBOX/` … `06_TEMPLATES/`) | [`skeleton/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/skeleton) |
+| Agent prompt templates | [`skeleton/06_TEMPLATES/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/skeleton/06_TEMPLATES) and bundled in [`supervertaler_assistant/templates/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/supervertaler_assistant/templates) |
+| The standalone desktop app (used to live in a separate `SuperMemory/` repo) | [`supervertaler_assistant/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/supervertaler_assistant) |
 
-## How it works
+## The format is unchanged
 
-```
-1. INGEST        →  Drop raw material into 00_INBOX/
-2. PROCESS INBOX →  AI reads it, writes structured articles with [[backlinks]]
-3. HEALTH CHECK  →  AI periodically checks for inconsistencies and gaps
-4. TRANSLATE     →  AI consults the KB, translates with full context
-```
+The wire format (folder layout, frontmatter schema, `### FILE:` output
+markers, scoring rules, code-fence tolerance) is byte-for-byte compatible.
+Any conformant v1.0 SuperMemory vault is also a conformant v1.1 memory
+bank – just rename the folder if you want, and point the
+Supervertaler Assistant or Supervertaler for Trados at it.
 
-## Folder structure
+## Hosts that read the memory-bank format
 
-| Folder | Purpose |
-|--------|---------|
-| `00_INBOX/` | Raw material drop zone |
-| `01_CLIENTS/` | Client profiles — preferences, style rules, history |
-| `02_TERMINOLOGY/` | Term articles — approved translations, rejected alternatives, reasoning |
-| `03_DOMAINS/` | Domain knowledge — conventions, pitfalls, reference material |
-| `04_STYLE/` | Style guides — formatting, register, localization rules |
-| `05_INDICES/` | Auto-generated indexes and maps of content |
-| `06_TEMPLATES/` | AI agent prompt templates |
+- [**Supervertaler Assistant**](https://github.com/Supervertaler/supervertaler-assistant) – the standalone cross-platform Python/PyQt6 app (this repo's successor)
+- [**Supervertaler for Trados**](https://github.com/Supervertaler/Supervertaler-for-Trados) – Trados Studio plugin
 
-## Getting started
-
-1. **Copy** this folder structure into your Supervertaler user data folder:
-   ```
-   C:\Users\{you}\Supervertaler\supermemory\
-   ```
-
-2. **Open** the folder as a vault in [Obsidian](https://obsidian.md/).
-
-3. **Drop** raw material (client briefs, glossaries, feedback, reference articles) into `00_INBOX/`.
-
-4. Click **Process Inbox** in the Supervertaler Assistant toolbar to organise your raw material into structured articles. (Or use the `06_TEMPLATES/compile.md` prompt template manually with any AI chat.)
-
-5. **Explore** your knowledge base in Obsidian's graph view — watch the connections grow.
-
-## Agent templates
-
-The `06_TEMPLATES/` folder contains prompt templates for the four SuperMemory agents:
-
-- **`compile.md`** — **Process Inbox**: reads raw material, produces structured KB articles
-- **`lint.md`** — **Health Check**: scans the KB for inconsistencies, broken links, stale content
-- **`translate_with_kb.md`** — Translates documents using the KB as context
-- **`query.md`** — Answers questions by consulting the KB
-
-## Design philosophy
-
-- **No vector DB, no embeddings.** At translation project scale (~100s of articles), structured Markdown + LLM reasoning outperforms RAG.
-- **Human-readable and auditable.** Every translation decision can be traced to a specific `.md` file you can open and read.
-- **Self-healing.** The Health Check catches inconsistencies, broken links, and stale content automatically.
-- **Portable.** It's just Markdown files. If any tool disappears, your knowledge stays.
-
-## Part of the Supervertaler ecosystem
-
-SuperMemory integrates with:
-- **Supervertaler for Trados** — Trados Studio plugin
-- **Supervertaler Workbench** — Standalone desktop app
-- **Supervertaler Workbench v2** — Cross-platform rewrite
-
-## License
-
-MIT
+Please update any bookmarks, clones or references to point at the new
+repo. This one will remain available as a read-only archive for history.
