@@ -7,6 +7,11 @@
 .obsidian/workspace-mobile.json
 .obsidian/graph.json
 .obsidian/cache/
+.obsidian/community-plugins.json
+.obsidian/plugins/
+
+# ── Supervertaler/Workbench edit-metadata sidecars ──────
+*.edtz
 
 # ── User data: everything that is NOT an example or template ──
 # Each content folder: ignore all .md files EXCEPT _EXAMPLE_* ones
