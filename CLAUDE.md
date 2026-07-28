@@ -1,9 +1,11 @@
 # Supervertaler SuperMemory — Claude Context
 
 ## What this project is
-SuperMemory is a self-organizing, AI-maintained translation knowledge base for the Supervertaler ecosystem. Inspired by Andrej Karpathy's "LLM Knowledge Base" pattern (April 2026), it replaces traditional translation memories (TM) and term bases with a structured Markdown wiki that the AI processes, maintains, and consults.
+SuperMemory is the AI-maintained translation knowledge base built into Supervertaler for Trados. Inspired by Andrej Karpathy's "LLM Knowledge Base" pattern (April 2026), it complements translation memories and termbases — which store wordings and term pairs — with a structured Markdown wiki holding the *reasoning* behind translation decisions, which the AI processes, maintains and consults.
 
-The vault is an Obsidian vault. All knowledge is stored as interlinked Markdown files.
+Knowledge lives in a **memory bank**: an Obsidian-compatible folder of interlinked Markdown articles.
+
+**This repository is the format definition, NOT a memory bank.** It holds `SPEC.md` and a starting `skeleton/`. Real banks live under the user's data folder (`<user data>\memory-banks\<name>`) and must never be kept inside a clone of this repo — a live bank sat here behind a symlink until 2026-07-28, which left real client data one `git add -A` away from a public push. The skeleton is nested under `skeleton/` specifically so that cannot recur.
 
 ## Architecture
 

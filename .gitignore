@@ -14,29 +14,31 @@
 *.edtz
 
 # ── User data: everything that is NOT an example or template ──
-# Each content folder: ignore all .md files EXCEPT _EXAMPLE_* ones
-00_INBOX/*.md
+# Deny-all per content folder, then re-admit only _EXAMPLE_* files.
+#
+# This deliberately ignores EVERY file, not just *.md. The earlier
+# ".md"-only rules let anything with a suffix after the extension slip
+# through as untracked – e.g. files written as
+# "Audit & Financial Reporting.md (frontmatter only)" – which a stray
+# `git add -A` would then have committed to this PUBLIC repo. Deny-all
+# closes that whole class rather than chasing individual patterns.
+00_INBOX/*
 !00_INBOX/_EXAMPLE_*.md
 00_INBOX/_archive/
 
-01_CLIENTS/*.md
-01_CLIENTS/**/*.md
+01_CLIENTS/*
 !01_CLIENTS/_EXAMPLE_*.md
 
-02_TERMINOLOGY/*.md
-02_TERMINOLOGY/**/*.md
+02_TERMINOLOGY/*
 !02_TERMINOLOGY/_EXAMPLE_*.md
 
-03_DOMAINS/*.md
-03_DOMAINS/**/*.md
+03_DOMAINS/*
 !03_DOMAINS/_EXAMPLE_*.md
 
-04_STYLE/*.md
-04_STYLE/**/*.md
+04_STYLE/*
 !04_STYLE/_EXAMPLE_*.md
 
-05_INDICES/*.md
-05_INDICES/**/*.md
+05_INDICES/*
 !05_INDICES/_EXAMPLE_*.md
 
 # Templates are always shipped — do NOT ignore 06_TEMPLATES/

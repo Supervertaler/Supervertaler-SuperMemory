@@ -1,38 +1,65 @@
-# Supervertaler-SuperMemory (archived)
+# SuperMemory — the Supervertaler memory-bank format
 
-> **This repository has moved.**
->
-> It is now part of [**Supervertaler/supervertaler-assistant**](https://github.com/Supervertaler/supervertaler-assistant).
+**SuperMemory** is the knowledge-base system built into [Supervertaler for Trados](https://github.com/Supervertaler/Supervertaler-for-Trados). Where a translation memory stores previous wordings and a termbase stores approved term pairs, SuperMemory stores the *reasoning*: why a term was chosen, what a client insists on, what was rejected last time, and which domain conventions apply.
 
-## What happened
+That knowledge lives in a **memory bank** — a plain folder of Obsidian-compatible Markdown articles with YAML frontmatter and `[[backlinks]]`. No database, no embeddings, no vendor lock-in. If every tool in this ecosystem disappeared tomorrow, your knowledge would still open in any text editor.
 
-"SuperMemory" has been retired as a product name. What used to be called
-"the SuperMemory vault" is now called a **memory bank** – the long-term
-memory of the **Supervertaler Assistant**, a cross-platform AI assistant
-for professional translators.
+This repository is the **format definition**: the specification, and a starting skeleton.
 
-Everything that used to live here has a new home in the unified
-`supervertaler-assistant` repo:
+## What's here
 
-| What it was | Where to find it now |
+| Path | What it is |
 |---|---|
-| Vault format specification (`SPEC.md`) | [`SPEC.md`](https://github.com/Supervertaler/supervertaler-assistant/blob/main/SPEC.md) – now titled *Supervertaler Memory Bank Format – Specification* (v1.1) |
-| Starting vault skeleton (`00_INBOX/` … `06_TEMPLATES/`) | [`skeleton/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/skeleton) |
-| Agent prompt templates | [`skeleton/06_TEMPLATES/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/skeleton/06_TEMPLATES) and bundled in [`supervertaler_assistant/templates/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/supervertaler_assistant/templates) |
-| The standalone desktop app (used to live in a separate `SuperMemory/` repo) | [`supervertaler_assistant/`](https://github.com/Supervertaler/supervertaler-assistant/tree/main/supervertaler_assistant) |
+| [`SPEC.md`](SPEC.md) | The format specification (v1.1) — folder layout, frontmatter schema, `### FILE:` output markers, scoring rules, code-fence tolerance |
+| [`skeleton/`](skeleton/) | A ready-to-copy empty bank: the seven folders, `.obsidian/` defaults, one `_EXAMPLE_` article per folder, and the agent prompt templates |
 
-## The format is unchanged
+> **This repository is not itself a memory bank.** The skeleton is deliberately nested under `skeleton/` so that no one is tempted to point a live bank at a clone of this repo. Keep your real banks well away from version control you might publish — or if you do want history, use a repository with no remote.
 
-The wire format (folder layout, frontmatter schema, `### FILE:` output
-markers, scoring rules, code-fence tolerance) is byte-for-byte compatible.
-Any conformant v1.0 SuperMemory vault is also a conformant v1.1 memory
-bank – just rename the folder if you want, and point the
-Supervertaler Assistant or Supervertaler for Trados at it.
+## Where banks actually live
 
-## Hosts that read the memory-bank format
+Supervertaler for Trados keeps banks under your user-data folder:
 
-- [**Supervertaler Assistant**](https://github.com/Supervertaler/supervertaler-assistant) – the standalone cross-platform Python/PyQt6 app (this repo's successor)
-- [**Supervertaler for Trados**](https://github.com/Supervertaler/Supervertaler-for-Trados) – Trados Studio plugin
+```
+<user data>\memory-banks\
+├── default\
+├── acme-legal\
+└── pharma\
+```
 
-Please update any bookmarks, clones or references to point at the new
-repo. This one will remain available as a read-only archive for history.
+Each is a self-contained bank with the seven-folder skeleton. You switch between them from the Memory Bank dropdown in the Supervertaler Assistant panel. The plugin ships its own copies of the templates and writes the skeleton for you whenever you create a bank, so you never need to clone this repo to get started — it is here as the reference, not as a dependency.
+
+## Reading a bank from outside Trados
+
+Since **v18.20.146** the plugin exposes memory banks over the [Supervertaler MCP server](https://docs.supervertaler.com/trados/mcp-server/), so any MCP client (Claude Desktop, Claude Code, and others) can consult your bank while you work — whatever CAT tool you happen to have open:
+
+- `get_supermemory_context` — the bank for the current project, with the article paths it drew from
+- `search_supermemory` — free-text search across the active bank
+- `list_supermemory_banks` — which banks exist and which is active
+
+Because a bank is just Markdown on disk, you can also open it in [Obsidian](https://obsidian.md/), search it with ordinary tools, or point a filesystem MCP server at the folder.
+
+## The seven folders
+
+| Folder | Contents |
+|---|---|
+| `00_INBOX` | Raw material awaiting processing — briefs, feedback notes, reference articles |
+| `01_CLIENTS` | Client profiles: preferences, style rules, terminology decisions |
+| `02_TERMINOLOGY` | Term articles with approved translations, rejected alternatives, and the reasoning |
+| `03_DOMAINS` | Domain conventions and common pitfalls |
+| `04_STYLE` | Style guides, register notes, formatting rules |
+| `05_INDICES` | Auto-generated indexes |
+| `06_TEMPLATES` | The agent prompts that drive Process Inbox, Health Check and Distill |
+
+Full details, including the frontmatter schema and the rules a conformant host must follow, are in [`SPEC.md`](SPEC.md).
+
+## Design notes
+
+The approach is inspired by Andrej Karpathy's [LLM knowledge base](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) pattern: structured Markdown that a model reasons over directly, rather than embeddings and retrieval. At translation-project scale — hundreds of articles, not millions — that stays auditable in a way a vector store does not. Every answer traces to a file you can open, read and correct by hand.
+
+## History
+
+An earlier plan for a standalone cross-platform "Supervertaler Assistant" app that would read these banks outside Trados was not pursued; the MCP server covers that ground without a second application to maintain. Its code remains in [supervertaler-assistant](https://github.com/Supervertaler/supervertaler-assistant) for reference.
+
+## Licence
+
+MIT — see [LICENSE](LICENSE).

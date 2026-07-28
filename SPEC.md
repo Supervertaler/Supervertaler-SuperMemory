@@ -1,10 +1,12 @@
-# SuperMemory Vault Format – Specification
+# Supervertaler Memory Bank Format – Specification
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Stable
 **Last updated:** 2026-04-08
 
-This document defines the SuperMemory vault format as an explicit contract. Any client that reads or writes a SuperMemory vault MUST conform to this spec, so that a vault created by one tool is fully interoperable with every other tool.
+This document defines the Supervertaler memory bank format as an explicit contract. Any client that reads or writes a memory bank MUST conform to this spec, so that a memory bank created by one tool is fully interoperable with every other tool.
+
+A **memory bank** is the structured, Obsidian-compatible folder of Markdown articles that the Supervertaler Assistant consults when answering questions, proposing terminology, or translating. It is the Assistant's long-term memory.
 
 ## Scope
 
@@ -28,9 +30,9 @@ This spec does **not** prescribe:
 
 ## Conformance levels
 
-A client is a **reader** if it can load a vault and surface articles (e.g. render a chat answer that cites them).
+A client is a **reader** if it can load a memory bank and surface articles (e.g. render a chat answer that cites them).
 
-A client is a **writer** if it can create or modify `.md` files inside the vault.
+A client is a **writer** if it can create or modify `.md` files inside the memory bank.
 
 A client is **fully conformant** if it implements:
 
@@ -46,14 +48,14 @@ A client is **fully conformant** if it implements:
 Known conformant clients as of this spec version:
 
 - **Supervertaler for Trados** (C#/.NET Trados Studio plugin) – reader + writer
-- **SuperMemory** standalone (Python/PyQt6 cross-platform app) – reader + writer
+- **Supervertaler Assistant** standalone (Python/PyQt6 cross-platform app) – reader + writer
 
 ## 1. Folder layout
 
-A SuperMemory vault is an Obsidian-compatible folder with this exact top-level structure:
+A memory bank is an Obsidian-compatible folder with this exact top-level structure:
 
 ```
-<vault-root>/
+<memory-bank-root>/
 ├── 00_INBOX/          Raw material drop zone
 ├── 01_CLIENTS/        Client profiles
 ├── 02_TERMINOLOGY/    Term articles with reasoning
@@ -69,13 +71,13 @@ Folder numeric prefixes (`00_` through `06_`) are part of the contract. They con
 
 ### 1.2 Content folders
 
-For the purposes of KB lookups, the **content folders** are:
+For the purposes of memory bank lookups, the **content folders** are:
 
 ```
 01_CLIENTS, 02_TERMINOLOGY, 03_DOMAINS, 04_STYLE
 ```
 
-`00_INBOX/` is raw, unprocessed material – it MUST NOT be included in KB context for translation or query agents. `05_INDICES/` is auto-generated and MAY be included. `06_TEMPLATES/` is prompt templates – it MUST NOT be included in KB context.
+`00_INBOX/` is raw, unprocessed material – it MUST NOT be included in memory bank context for translation or query agents. `05_INDICES/` is auto-generated and MAY be included. `06_TEMPLATES/` is prompt templates – it MUST NOT be included in memory bank context.
 
 ### 1.3 Archive subfolder
 
@@ -94,13 +96,13 @@ Clients MUST tolerate the presence of `.obsidian/`, `.trash/`, and arbitrary use
 
 ### 2.1 Reserved prefixes
 
-Files beginning with `_EXAMPLE_` are example articles shipped with the skeleton. They are part of the vault's documentation and MUST NOT be processed by agents as real content. Readers MUST skip them when building KB context.
+Files beginning with `_EXAMPLE_` are example articles shipped with the skeleton. They are part of the memory bank's documentation and MUST NOT be processed by agents as real content. Readers MUST skip them when building memory bank context.
 
 Files beginning with an underscore (`_`) other than `_EXAMPLE_` are reserved for future use. Clients SHOULD skip them conservatively.
 
 ## 3. Character encoding
 
-All files in the vault MUST be UTF-8 (no BOM). Line endings MAY be `LF` or `CRLF`; clients MUST tolerate both on read and SHOULD preserve the existing convention on write.
+All files in the memory bank MUST be UTF-8 (no BOM). Line endings MAY be `LF` or `CRLF`; clients MUST tolerate both on read and SHOULD preserve the existing convention on write.
 
 ## 4. YAML frontmatter
 
@@ -172,7 +174,7 @@ All content folders:
 
 ### 4.3 Code-fence tolerance (MANDATORY)
 
-LLM replies are often wrapped in a ` ```markdown` code fence. When a user pastes such a reply directly into a vault file, the frontmatter ends up inside a fenced block:
+LLM replies are often wrapped in a ` ```markdown` code fence. When a user pastes such a reply directly into a memory bank file, the frontmatter ends up inside a fenced block:
 
 ````markdown
 ```markdown
@@ -189,7 +191,7 @@ Clients reading frontmatter MUST tolerate this pattern:
 
 > If the first non-empty line of the file starts with ` ``` `, strip that line (and any matching closing fence) before looking for the `---` frontmatter delimiters.
 
-This rule was added in spec v1.0 after two production files in a live vault were rendered invisible to clients that did strict frontmatter parsing. Both the Trados plugin and the Python standalone now implement it.
+This rule was added in spec v1.0 after two production files in a live memory bank were rendered invisible to clients that did strict frontmatter parsing. Both the Trados plugin and the Python standalone now implement it.
 
 ### 4.4 Unknown keys
 
@@ -207,7 +209,7 @@ Clients rendering article bodies SHOULD use a CommonMark renderer with tables en
 
 ## 6. Wikilinks
 
-SuperMemory uses Obsidian-style wikilinks for all internal cross-references:
+The memory bank uses Obsidian-style wikilinks for all internal cross-references:
 
 ```markdown
 See also: [[Acme Corporation]], [[Legal]], [[compliance → naleving]].
@@ -223,9 +225,9 @@ Wikilinks with a pipe alias (`[[Target|display text]]`) are allowed; the resolve
 
 A wikilink that does not resolve is not an error; Health Check reports it but does not auto-remove it. This allows forward-references to articles that will exist after the next Process Inbox run.
 
-## 7. Scoring rules for KB lookup
+## 7. Scoring rules for memory bank lookup
 
-When assembling KB context for a query (chat turn, translation, etc.), clients MUST score candidate articles using this exact rule set, so that scoring is byte-for-byte reproducible across clients:
+When assembling memory bank context for a query (chat turn, translation, etc.), clients MUST score candidate articles using this exact rule set, so that scoring is byte-for-byte reproducible across clients:
 
 | Signal | Points | Description |
 |---|---|---|
@@ -247,7 +249,7 @@ Given a frontmatter value like `"en-US → nl-BE"`, the client MUST extract both
 
 ## 8. Token-budget trimming priority
 
-When the assembled KB context exceeds the configured token budget, clients MUST trim in this priority order (most important retained last):
+When the assembled memory bank context exceeds the configured token budget, clients MUST trim in this priority order (most important retained last):
 
 1. **Client profiles** – retained to the last drop
 2. **Domain articles** – retained until client headroom is needed
@@ -357,23 +359,23 @@ Readers listing inbox files MUST skip any file with `compiled: true` in its fron
 
 ## 12. Health Check snapshots
 
-When the Lint agent builds its whole-vault snapshot, it MUST:
+When the Lint agent builds its whole-memory-bank snapshot, it MUST:
 
 1. Walk the content folders (§1.2) in deterministic order: folder name ascending, then filename ascending.
 2. Include each article's frontmatter + body, separated by a line-delimited header (`----- <relative path> -----`).
 3. Cap the total snapshot at an implementation-defined character limit (Python standalone uses 120,000 chars ≈ 30k tokens).
 4. If the cap is reached, truncate **by whole articles only** (never mid-body) and report `truncated: true` in the result.
 
-This is the one place where clients MAY skip articles to fit a budget; §8 does not apply here because Lint operates on the whole vault, not a per-query context.
+This is the one place where clients MAY skip articles to fit a budget; §8 does not apply here because Lint operates on the whole memory bank, not a per-query context.
 
 ## 13. Template resolution
 
 Agent prompts are loaded in this priority order:
 
-1. **Vault override:** `<vault>/06_TEMPLATES/<agent>.md` if present.
+1. **Memory bank override:** `<memory-bank>/06_TEMPLATES/<agent>.md` if present.
 2. **Bundled default:** the client's built-in copy shipped with the tool.
 
-This allows users to customise agent behaviour per-vault without editing the client source. Clients MUST respect vault overrides silently (no warning) – this is a documented power-user feature.
+This allows users to customise agent behaviour per-memory-bank without editing the client source. Clients MUST respect memory bank overrides silently (no warning) – this is a documented power-user feature.
 
 ### 13.1 Template file names
 
@@ -382,7 +384,7 @@ This allows users to customise agent behaviour per-vault without editing the cli
 | Process Inbox | `compile.md` |
 | Health Check | `lint.md` |
 | Query (chat) | `query.md` |
-| Translate with KB | `translate_with_kb.md` |
+| Translate with memory bank | `translate_with_memory_bank.md` |
 | Distill | `distill.md` |
 
 ## 14. Versioning
@@ -397,15 +399,15 @@ Clients SHOULD embed the spec version they were built against in their about/dia
 
 ## 15. Reference implementations
 
-- [Supervertaler for Trados](https://github.com/Supervertaler/Supervertaler-for-Trados) – `src/Supervertaler.Trados/Core/SuperMemoryReader.cs`
-- [SuperMemory standalone](https://github.com/Supervertaler/SuperMemory) – `supermemory/vault.py`
+- [Supervertaler for Trados](https://github.com/Supervertaler/Supervertaler-for-Trados) – `src/Supervertaler.Trados/Core/MemoryBankReader.cs`
+- [Supervertaler Assistant standalone](https://github.com/Supervertaler/supervertaler-assistant) – `supervertaler_assistant/memory_bank.py`
 
 Both implementations are kept in lock-step with this spec; any discrepancy is a bug in the client, not in the spec.
 
-## Appendix A – Minimal example vault
+## Appendix A – Minimal example memory bank
 
 ```
-my-vault/
+my-memory-bank/
 ├── 00_INBOX/
 │   └── _archive/
 ├── 01_CLIENTS/
@@ -421,12 +423,13 @@ my-vault/
     ├── compile.md
     ├── lint.md
     ├── query.md
-    ├── translate_with_kb.md
+    ├── translate_with_memory_bank.md
     └── distill.md
 ```
 
-The skeleton repo at <https://github.com/Supervertaler/Supervertaler-SuperMemory> is a concrete instance of this layout and MAY be used as a starting point for new vaults.
+A concrete instance of this layout is shipped under `skeleton/` in the [supervertaler-assistant repo](https://github.com/Supervertaler/supervertaler-assistant) and MAY be used as a starting point for new memory banks.
 
 ## Appendix B – Change log
 
+- **1.1 (2026-04-08):** Renamed "vault" to "memory bank" throughout. Retired the "SuperMemory" product name; the spec is now the Supervertaler Memory Bank Format. Renamed `translate_with_kb.md` → `translate_with_memory_bank.md` in §13.1. Updated §15 reference implementation paths (`SuperMemoryReader.cs` → `MemoryBankReader.cs`, `supermemory/vault.py` → `supervertaler_assistant/memory_bank.py`). No wire-format changes – any conformant v1.0 client is also v1.1 conformant.
 - **1.0 (2026-04-08):** Initial public version. Extracts the format contract from the original C# `SuperMemoryReader` and the new Python `supermemory.vault` module. Adds §4.3 code-fence tolerance after two production vault files were found to be silently unreadable because they had been pasted from an LLM reply wrapped in a fenced block.
