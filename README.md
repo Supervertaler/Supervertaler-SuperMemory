@@ -1,3 +1,29 @@
+> ## ⚠️ Archived &mdash; this describes a format that is no longer used
+>
+> SuperMemory was redesigned in **Supervertaler for Trados v18.20.169**
+> (August 2026). A memory bank is no longer a folder of interlinked articles
+> with YAML frontmatter and `[[backlinks]]`; it is **three Markdown files** you
+> edit by hand &mdash; `brief.md`, `terminology.md` and `style.md` &mdash; plus
+> a `reference/` folder for source material, and a `_shared` bank of house
+> defaults that any client bank can override.
+>
+> **Why it changed.** A real bank reached 136 terminology files &mdash; for what
+> is a 136-row table &mdash; behind a 97-file backlog nobody had processed, with
+> around 15% of articles carrying malformed frontmatter that silently excluded
+> them from the very filtering the structure existed to enable. Nothing said so,
+> and by that size nobody could read the bank and tell. Knowledge you cannot
+> audit is not knowledge you can rely on.
+>
+> The format is now simple enough that it does not need a specification
+> repository: it is documented in full at
+> **[docs.supervertaler.com/trados/ai-assistant/super-memory/](https://docs.supervertaler.com/trados/ai-assistant/super-memory/)**.
+>
+> The plugin **detects and converts** banks in the old format described below;
+> nothing is deleted in the process. Everything past this notice is kept for
+> reference only.
+
+---
+
 # SuperMemory — the Supervertaler memory-bank format
 
 **SuperMemory** is the knowledge-base system built into [Supervertaler for Trados](https://github.com/Supervertaler/Supervertaler-for-Trados). Where a translation memory stores previous wordings and a termbase stores approved term pairs, SuperMemory stores the *reasoning*: why a term was chosen, what a client insists on, what was rejected last time, and which domain conventions apply.
